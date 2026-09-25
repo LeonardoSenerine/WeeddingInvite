@@ -2,27 +2,27 @@
 //  CONFIGURAÇÃO DO CONVITE — edite só este arquivo
 // =============================================================
 window.CONVITE = {
-  // Nomes do casal (TODO: confirmar)
-  noiva: "Noiva",
-  noivo: "Noivo",
+  // Nomes do casal
+  noiva: "Isabella",
+  noivo: "Murilo",
 
-  // Data e hora da cerimônia — formato AAAA-MM-DDTHH:MM (TODO: confirmar)
-  dataHora: "2027-04-04T16:00",
+  // Data e hora da cerimônia — formato AAAA-MM-DDTHH:MM
+  dataHora: "2026-11-07T16:30",
 
-  // Data limite para confirmar presença (TODO: confirmar)
-  prazoConfirmacao: "2027-03-01",
+  // Data limite para confirmar presença — AAAA-MM-DD (vazio = não exibe)
+  prazoConfirmacao: "",
 
   local: {
-    nome: "Rancho das Pedras",
+    nome: "Chácara Recanto Moenda",
     endereco: "", // TODO: endereço completo
     cidade: "",   // TODO: cidade / UF
     // Link do Google Maps (se vazio, é gerado a partir do nome + endereço)
     mapa: "",
   },
 
-  // Traje (TODO: confirmar)
-  traje: "Esporte fino",
-  trajeObs: "A cerimônia é ao ar livre, na grama — prefira saltos grossos.",
+  // Traje (vazio = não exibe o card)
+  traje: "",
+  trajeObs: "",
 
   // Contatos para confirmação de presença (WhatsApp)
   contatos: [
@@ -77,10 +77,11 @@ window.CONVITE = {
   ],
 
   dicaPresentes:
-    "Antes de comprar eletrodomésticos ou jogos grandes, fale com a Amanda ou a Julia para saber o que o casal já ganhou. Assim você evita presentes repetidos.",
+    "Antes de comprar eletrodomésticos ou jogos grandes, fale com a Amanda para saber o que o casal já ganhou. Assim você evita presentes repetidos.",
 
   // Fotos do casal (pasta assets/img)
   galeria: [
+    { src: "assets/img/casal-noivos.jpg", alt: "Isabella e Murilo arrumados para uma festa" },
     { src: "assets/img/casal-retrato.jpg", alt: "O casal abraçado sorrindo" },
     { src: "assets/img/casal-por-do-sol.jpg", alt: "O casal de óculos escuros ao pôr do sol" },
     { src: "assets/img/casal-coco.jpg", alt: "O casal tomando água de coco" },

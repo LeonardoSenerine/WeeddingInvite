@@ -6,7 +6,7 @@
   // ---------- Dados derivados ----------
   const data = new Date(C.dataHora);
   const fmt = (opts) => new Intl.DateTimeFormat("pt-BR", opts).format(data);
-  const prazo = new Date(C.prazoConfirmacao + "T12:00");
+  const prazo = C.prazoConfirmacao ? new Date(C.prazoConfirmacao + "T12:00") : null;
   const enderecoCompleto = [C.local.endereco, C.local.cidade].filter(Boolean).join(" — ");
   const mapa = C.local.mapa ||
     "https://www.google.com/maps/search/?api=1&query=" +
@@ -15,13 +15,17 @@
   const binds = {
     noiva: C.noiva,
     noivo: C.noivo,
-    iniciais: `${C.noiva} & ${C.noivo}`,
+    monograma: `${C.noiva[0]}&${C.noivo[0]}`,
+    diaSemana: fmt({ weekday: "long" }).replace("-feira", ""),
+    dia: fmt({ day: "2-digit" }),
+    mes: fmt({ month: "long" }),
+    horaCurta: "às " + fmt({ hour: "2-digit", minute: "2-digit" }).replace(":", "h"),
     dataExtenso: (() => { const t = fmt({ weekday: "long", day: "numeric", month: "long", year: "numeric" }); return t[0].toUpperCase() + t.slice(1); })(),
     dataCurta: fmt({ day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, " · "),
     hora: "às " + fmt({ hour: "2-digit", minute: "2-digit" }).replace(":", "h"),
     localNome: C.local.nome,
     localEndereco: enderecoCompleto || "Endereço em breve",
-    prazo: new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long" }).format(prazo),
+    prazo: prazo ? new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long" }).format(prazo) : "",
     dica: C.dicaPresentes,
     traje: C.traje,
     trajeObs: C.trajeObs,
@@ -30,6 +34,8 @@
   document.title = `${C.noiva} & ${C.noivo} · Convite de Casamento`;
 
   $("#mapLink").href = mapa;
+  $("#prazoTexto").hidden = !prazo;
+  $("#cardTraje").hidden = !C.traje;
 
   // Google Agenda
   const pad = (n) => String(n).padStart(2, "0");

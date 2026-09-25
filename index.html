@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Convite de Casamento</title>
-  <meta name="description" content="Você é nosso convidado! Confirme sua presença e veja a lista de presentes." />
-  <meta property="og:title" content="Convite de Casamento" />
+  <title>Isabella &amp; Murilo · Convite de Casamento</title>
+  <meta name="description" content="Isabella e Murilo convidam para a celebração de seu casamento. Confirme sua presença e veja a lista de presentes." />
+  <meta property="og:title" content="Isabella & Murilo · Convite de Casamento" />
   <meta property="og:description" content="Você é nosso convidado! Confirme sua presença." />
-  <meta property="og:image" content="assets/img/casal-noivos.jpg" />
-  <meta name="theme-color" content="#f7f1e8" />
+  <meta property="og:image" content="assets/convite-original.jpg" />
+  <meta name="theme-color" content="#f3ecdf" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -17,15 +17,21 @@
 <body>
   <!-- CAPA / ENVELOPE -->
   <div class="envelope" id="envelope" role="dialog" aria-label="Abrir convite">
+    <img class="flor flor--tl" src="assets/img/flores/canto-sup-esq.png" alt="" />
+    <img class="flor flor--br" src="assets/img/flores/canto-inf-dir.png" alt="" />
     <div class="envelope__inner">
-      <p class="eyebrow">Você recebeu um convite</p>
-      <p class="script envelope__names" data-bind="iniciais"></p>
-      <button class="btn" id="abrir">Abrir convite</button>
+      <p class="caps">Você recebeu um convite</p>
+      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
+      <p class="script envelope__names"><span data-bind="noiva"></span> <small>e</small> <span data-bind="noivo"></span></p>
+      <button class="seal" id="abrir" aria-label="Abrir convite">
+        <span class="script" data-bind="monograma"></span>
+      </button>
+      <p class="caps caps--small">Toque para abrir</p>
     </div>
   </div>
 
   <nav class="nav" id="nav">
-    <a href="#inicio" class="nav__brand script" data-bind="iniciais"></a>
+    <a href="#inicio" class="nav__brand script" data-bind="monograma"></a>
     <button class="nav__toggle" aria-label="Menu" aria-expanded="false" id="navToggle">☰</button>
     <ul class="nav__links" id="navLinks">
       <li><a href="#historia">O casal</a></li>
@@ -35,17 +41,32 @@
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- HERO: réplica do convite -->
   <header class="hero" id="inicio">
-    <div class="hero__photo" style="background-image:url('assets/img/casal-noivos.jpg')" role="img" aria-label="Os noivos"></div>
-    <div class="hero__content">
-      <p class="eyebrow">Com a bênção de Deus e de nossas famílias</p>
+    <img class="flor flor--tl" src="assets/img/flores/canto-sup-esq.png" alt="" />
+    <img class="flor flor--tr" src="assets/img/flores/canto-sup-dir.png" alt="" />
+    <img class="flor flor--bl" src="assets/img/flores/canto-inf-esq.png" alt="" />
+    <img class="flor flor--br" src="assets/img/flores/canto-inf-dir.png" alt="" />
+    <div class="hero__frame">
+      <p class="caps">Com a bênção de Deus<br />e de seus pais</p>
+      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
       <h1 class="script hero__names">
-        <span data-bind="noiva"></span><span class="amp">&amp;</span><span data-bind="noivo"></span>
+        <span data-bind="noiva"></span>
+        <span class="hero__e">e</span>
+        <span data-bind="noivo"></span>
       </h1>
-      <p class="hero__sub">convidam você para celebrar o nosso casamento</p>
-      <div class="divider"><span>✦</span></div>
-      <p class="hero__date" data-bind="dataExtenso"></p>
+      <p class="caps caps--lg">Convidam para a celebração<br />de seu casamento</p>
+      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
+      <div class="date-block">
+        <span class="date-block__side" data-bind="diaSemana"></span>
+        <span class="date-block__mid">
+          <strong data-bind="dia"></strong>
+          <span data-bind="mes"></span>
+        </span>
+        <span class="date-block__side" data-bind="horaCurta"></span>
+      </div>
+      <p class="caps local-label">Local</p>
+      <p class="script local-name" data-bind="localNome"></p>
       <div class="countdown" id="countdown" aria-live="polite">
         <div><strong data-cd="d">0</strong><span>dias</span></div>
         <div><strong data-cd="h">0</strong><span>horas</span></div>
@@ -59,8 +80,9 @@
   <main>
     <!-- HISTÓRIA / GALERIA -->
     <section class="section" id="historia">
-      <p class="eyebrow">Nossa história</p>
-      <h2 class="section__title">Dois caminhos, <em>um só destino</em></h2>
+      <p class="caps">Nossa história</p>
+      <h2 class="section__title script">Dois caminhos, um só destino</h2>
+      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
       <p class="section__lead">
         Entre pores do sol, águas de coco e muitas risadas, descobrimos que a vida é
         melhor quando vivida lado a lado. Agora queremos dar o próximo passo — e
@@ -71,42 +93,41 @@
 
     <!-- EVENTO -->
     <section class="section section--tinted" id="evento">
-      <p class="eyebrow">O grande dia</p>
-      <h2 class="section__title">Cerimônia &amp; Recepção</h2>
-      <div class="cards">
+      <p class="caps">O grande dia</p>
+      <h2 class="section__title script">Cerimônia &amp; Recepção</h2>
+      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
+      <div class="cards" id="cards">
         <article class="card">
-          <div class="card__icon">📅</div>
-          <h3>Quando</h3>
-          <p data-bind="dataExtenso"></p>
+          <p class="caps caps--small">Quando</p>
+          <p class="card__main" data-bind="dataExtenso"></p>
           <p class="muted" data-bind="hora"></p>
           <a class="link" id="addCalendar" target="_blank" rel="noopener">Adicionar à agenda</a>
         </article>
         <article class="card">
-          <div class="card__icon">📍</div>
-          <h3>Onde</h3>
-          <p data-bind="localNome"></p>
+          <p class="caps caps--small">Onde</p>
+          <p class="card__main script card__script" data-bind="localNome"></p>
           <p class="muted" data-bind="localEndereco"></p>
           <a class="link" id="mapLink" target="_blank" rel="noopener">Como chegar</a>
         </article>
-        <article class="card">
-          <div class="card__icon">👗</div>
-          <h3>Traje</h3>
-          <p data-bind="traje"></p>
+        <article class="card" id="cardTraje">
+          <p class="caps caps--small">Traje</p>
+          <p class="card__main" data-bind="traje"></p>
           <p class="muted" data-bind="trajeObs"></p>
         </article>
       </div>
       <div class="venue" id="venue" hidden>
-        <h3 class="venue__title">Conheça o espaço</h3>
+        <h3 class="venue__title script">Conheça o espaço</h3>
         <div class="venue__grid" id="venueGrid"></div>
       </div>
     </section>
 
     <!-- RSVP -->
     <section class="section" id="rsvp">
-      <p class="eyebrow">RSVP</p>
-      <h2 class="section__title">Confirme sua presença</h2>
+      <p class="caps">Confirmação</p>
+      <h2 class="section__title script">Confirme sua presença</h2>
+      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
       <p class="section__lead">
-        Pedimos, por gentileza, que confirme até <strong data-bind="prazo"></strong>.
+        <span id="prazoTexto">Pedimos, por gentileza, que confirme até <strong data-bind="prazo"></strong>. </span>
         Ao enviar, abriremos o WhatsApp com sua mensagem pronta.
       </p>
       <form class="rsvp" id="rsvpForm" novalidate>
@@ -116,7 +137,7 @@
         </label>
         <fieldset class="choice">
           <legend>Você vai?</legend>
-          <label><input type="radio" name="vai" value="sim" checked /> Sim, estarei lá! 🎉</label>
+          <label><input type="radio" name="vai" value="sim" checked /> Sim, estarei lá!</label>
           <label><input type="radio" name="vai" value="nao" /> Infelizmente não poderei ir</label>
         </fieldset>
         <div class="row" id="rowQtd">
@@ -149,8 +170,9 @@
 
     <!-- PRESENTES -->
     <section class="section section--tinted" id="presentes">
-      <p class="eyebrow">Lista de presentes</p>
-      <h2 class="section__title">Sugestões para o nosso lar</h2>
+      <p class="caps">Lista de presentes</p>
+      <h2 class="section__title script">Sugestões para o nosso lar</h2>
+      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
       <p class="section__lead">
         Sua presença é o nosso maior presente! Mas, se quiser nos presentear,
         separamos sugestões úteis que vamos usar bastante no dia a dia.
@@ -158,7 +180,7 @@
       <div class="tabs" role="tablist" id="giftTabs"></div>
       <div class="gifts" id="giftList"></div>
       <div class="tip">
-        <strong>💡 Dica:</strong> <span data-bind="dica"></span>
+        <strong>Dica:</strong> <span data-bind="dica"></span>
       </div>
       <div class="pix" id="pixBox" hidden>
         <p>Prefere presentear via Pix?</p>
@@ -169,9 +191,9 @@
   </main>
 
   <footer class="footer">
-    <p class="script footer__names" data-bind="iniciais"></p>
-    <p data-bind="dataCurta"></p>
-    <p class="muted small">Feito com amor ♥</p>
+    <p class="script footer__names"><span data-bind="noiva"></span> e <span data-bind="noivo"></span></p>
+    <p class="caps caps--small" data-bind="dataCurta"></p>
+    <p class="small footer__love">Feito com amor ♥</p>
   </footer>
 
   <div class="lightbox" id="lightbox" hidden>
