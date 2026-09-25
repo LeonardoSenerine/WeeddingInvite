@@ -589,3 +589,76 @@ figure { margin: 0; }
 .local__map { margin-top: 1.5rem; }
 .carousel--local .carousel__slide { aspect-ratio: 16 / 10; }
 .carousel--local .carousel__slide img { object-position: center; }
+
+/* ACOMPANHANTES */
+.acomp { display: grid; gap: 0.25rem; }
+.acomp__title { margin: 0; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+.acomp__hint { margin: 0 0 0.5rem; font-size: 0.95rem; color: var(--muted); }
+.acomp__list { display: grid; gap: 0.4rem; }
+.acomp__item {
+  display: grid; grid-template-columns: 1fr 1fr; align-items: end; column-gap: 1.25rem;
+  padding: 0.9rem 0 0.4rem; border-top: 1px dashed var(--line);
+  animation: entraCampo 0.45s cubic-bezier(.2,.7,.2,1) both;
+}
+.acomp__item--crianca { grid-template-columns: 1fr 5rem; }
+.acomp__item > .acomp__tag, .acomp__item > .field:nth-child(2) { grid-column: 1 / -1; }
+.acomp__tag {
+  padding-bottom: 0; font: italic 500 1.05rem/1.2 var(--serif); color: var(--wine);
+  font-variant-numeric: lining-nums;
+}
+.field--idade input { text-align: center; -moz-appearance: textfield; appearance: textfield; }
+.field--idade input::-webkit-inner-spin-button, .field--idade input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.field--idade label { left: 50%; transform: translateX(-50%); }
+.field--idade input:focus + label, .field--idade input:not(:placeholder-shown) + label { transform: translate(-50%, -1.4rem) scale(0.8); transform-origin: center top; }
+.field.is-invalid input { border-bottom-color: #b2402f; }
+.field.is-invalid label { color: #b2402f; }
+@keyframes entraCampo { from { opacity: 0; transform: translateY(-8px); } }
+@media (max-width: 600px) {
+}
+
+/* seletor de parentesco */
+.field--select { position: relative; }
+.par__btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  min-height: 3.35rem; padding: 1.6rem 0 0.55rem; cursor: pointer; text-align: left;
+  font: 500 1.2rem/1.3 var(--serif); color: var(--ink);
+  border: 0; border-bottom: 1px solid var(--gold-soft); background: transparent;
+}
+.par__btn::after {
+  content: ""; flex: none; width: 9px; height: 9px; margin: 0 0.3rem 0.35rem 0;
+  border-right: 1.5px solid var(--wine); border-bottom: 1.5px solid var(--wine);
+  transform: rotate(45deg); transition: transform 0.3s ease;
+}
+.field--select.is-open .par__btn::after { transform: translateY(4px) rotate(-135deg); }
+.par__btn:focus-visible { outline: none; }
+.field--select:focus-within::after, .field--select.is-open::after { transform: scaleX(1); }
+.par__label {
+  position: absolute; left: 0; top: 1.55rem; font-size: 1.05rem; color: var(--muted);
+  pointer-events: none; transform-origin: left top; transition: transform 0.25s, color 0.25s;
+}
+.field--select.has-value .par__label, .field--select.is-open .par__label { transform: translateY(-1.4rem) scale(0.8); color: var(--gold); }
+.field--select.is-invalid .par__btn { border-bottom-color: #b2402f; }
+.field--select.is-invalid .par__label { color: #b2402f; }
+
+.par__panel {
+  grid-column: 1 / -1; margin-top: 0.75rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); gap: 0.9rem 1rem; padding: 1rem 1.1rem 1.1rem;
+  background: var(--bg); border: 1px solid var(--line); border-top: 2px solid var(--wine);
+  box-shadow: 0 18px 30px -22px rgba(59, 42, 30, 0.45);
+  opacity: 0; transform: translateY(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.par__panel.is-open { opacity: 1; transform: none; }
+.par__group { display: grid; align-content: start; gap: 0.4rem; }
+.par__glabel { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); line-height: 1.3; }
+.par__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.par__opt {
+  padding: 0.4rem 0.8rem; border: 1px solid var(--gold-soft); border-radius: 999px;
+  background: var(--paper); color: var(--ink); cursor: pointer;
+  font: 500 1.05rem/1.2 var(--serif); transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+.par__opt:hover, .par__opt:focus-visible { border-color: var(--wine); color: var(--wine); outline: none; transform: translateY(-1px); }
+.par__opt[aria-selected="true"] { background: var(--wine); border-color: var(--wine); color: var(--paper); }
+@media (max-width: 600px) {
+  .par__panel { grid-template-columns: 1fr 1fr; padding: 0.9rem; gap: 0.8rem; }
+}

@@ -39,6 +39,7 @@ window.CONVITE = {
   informacoes: [
     { titulo: "Chegue com antecedência", texto: "A cerimônia começa às {hora}. Chegue uns 30 minutos antes para estacionar, se acomodar e não perder a entrada da noiva." },
     { titulo: "Cerimônia e festa no mesmo lugar", texto: "Tudo acontece na {local}. Não precisa se deslocar entre a cerimônia e a recepção." },
+    { titulo: "Acompanhantes", texto: "Pedimos que os acompanhantes sejam apenas familiares. Ao confirmar, informe o nome e o parentesco de cada um." },
     { titulo: "Confirme sua presença", texto: "Use o formulário desta página. Leva menos de um minuto e ajuda muito na organização de lugares e buffet." },
     { titulo: "Fotos e momentos", texto: "Fique à vontade para registrar a festa e compartilhar com a gente. Vamos adorar ver o dia pelo seu olhar." },
     { titulo: "Presentes", texto: "Sua presença já é o presente. Se quiser nos dar algo, as sugestões estão no final da página." },

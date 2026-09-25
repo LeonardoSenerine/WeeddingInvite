@@ -372,8 +372,164 @@
   const form = $("#rsvpForm"), rowQtd = $("#rowQtd"), rowAcomp = $("#rowAcomp");
   form.addEventListener("change", () => {
     const nao = form.vai.value === "nao";
-    rowQtd.hidden = nao; rowAcomp.hidden = nao;
+    rowQtd.hidden = nao;
+    atualizarAcomp();
   });
+
+  // Campos com o nome de cada acompanhante (aparecem conforme a quantidade)
+  const acompList = $("#acompList");
+  const valoresAcomp = {}; // guarda o que foi digitado mesmo se o campo sumir
+  let idCampo = 0;
+  const campoNome = (chave, rotulo) => {
+    const id = "f-" + chave;
+    const div = document.createElement("div");
+    div.className = "field";
+    div.innerHTML = `<input type="text" id="${id}" autocomplete="off" placeholder=" " /><label for="${id}"></label>`;
+    const input = $("input", div);
+    input.dataset.chave = chave;
+    input.value = valoresAcomp[chave] || "";
+    input.addEventListener("input", () => { valoresAcomp[chave] = input.value; div.classList.remove("is-invalid"); });
+    $("label", div).textContent = rotulo;
+    return div;
+  };
+  const parentescos = {
+    adulto: [
+      ["Cônjuge", ["Esposa", "Marido"]],
+      ["Pais", ["Mãe", "Pai", "Madrasta", "Padrasto"]],
+      ["Filhos", ["Filha", "Filho", "Enteada", "Enteado"]],
+      ["Irmãos", ["Irmã", "Irmão"]],
+      ["Avós", ["Avó", "Avô"]],
+      ["Netos", ["Neta", "Neto"]],
+      ["Tios", ["Tia", "Tio"]],
+      ["Primos", ["Prima", "Primo"]],
+      ["Sobrinhos", ["Sobrinha", "Sobrinho"]],
+      ["Família do cônjuge", ["Sogra", "Sogro", "Cunhada", "Cunhado", "Nora", "Genro"]],
+      ["Padrinhos", ["Madrinha", "Padrinho"]],
+    ],
+    crianca: [
+      ["Filhos", ["Filha", "Filho", "Enteada", "Enteado"]],
+      ["Irmãos", ["Irmã", "Irmão"]],
+      ["Sobrinhos", ["Sobrinha", "Sobrinho"]],
+      ["Netos", ["Neta", "Neto"]],
+      ["Primos", ["Prima", "Primo"]],
+    ],
+  };
+  let parAberto = null;
+  const fecharPar = (foco) => {
+    if (!parAberto) return;
+    const { campo, painel, botao } = parAberto;
+    campo.classList.remove("is-open"); botao.setAttribute("aria-expanded", "false");
+    painel.classList.remove("is-open");
+    painel.addEventListener("transitionend", () => { if (!painel.classList.contains("is-open")) painel.hidden = true; }, { once: true });
+    if (foco) botao.focus();
+    parAberto = null;
+  };
+  document.addEventListener("click", (e) => {
+    if (parAberto && !parAberto.campo.contains(e.target) && !parAberto.painel.contains(e.target)) fecharPar();
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") fecharPar(true); });
+
+  // Retorna [campo, painel]: o painel ocupa a largura toda do bloco do acompanhante
+  const campoParentesco = (chave, tipo) => {
+    const k = chave + "-par";
+    const campo = document.createElement("div");
+    campo.className = "field field--select";
+    const botao = document.createElement("button");
+    botao.type = "button"; botao.className = "par__btn";
+    botao.setAttribute("aria-haspopup", "listbox"); botao.setAttribute("aria-expanded", "false");
+    const valor = document.createElement("span"); valor.className = "par__val";
+    botao.appendChild(valor);
+    const label = document.createElement("span"); label.className = "par__label"; label.textContent = "Parentesco";
+    campo.append(botao, label);
+
+    const painel = document.createElement("div");
+    painel.className = "par__panel"; painel.hidden = true;
+    painel.setAttribute("role", "listbox"); painel.setAttribute("aria-label", "Parentesco");
+    parentescos[tipo].forEach(([grupo, opcoes]) => {
+      const linha = document.createElement("div"); linha.className = "par__group";
+      const g = document.createElement("span"); g.className = "par__glabel"; g.textContent = grupo;
+      const chips = document.createElement("div"); chips.className = "par__chips";
+      opcoes.forEach((op) => {
+        const c = document.createElement("button");
+        c.type = "button"; c.className = "par__opt"; c.textContent = op;
+        c.setAttribute("role", "option");
+        c.addEventListener("click", () => { escolher(op); fecharPar(true); });
+        chips.appendChild(c);
+      });
+      linha.append(g, chips); painel.appendChild(linha);
+    });
+
+    const escolher = (op) => {
+      campo.dataset.valor = op; valor.textContent = op;
+      valoresAcomp[k] = op;
+      campo.classList.toggle("has-value", !!op); campo.classList.remove("is-invalid");
+      $$(".par__opt", painel).forEach((c) => c.setAttribute("aria-selected", c.textContent === op));
+    };
+    escolher(valoresAcomp[k] || "");
+    if (!valoresAcomp[k]) campo.classList.remove("has-value");
+
+    botao.addEventListener("click", () => {
+      const jaAberto = parAberto && parAberto.campo === campo;
+      fecharPar();
+      if (jaAberto) return;
+      painel.hidden = false;
+      requestAnimationFrame(() => painel.classList.add("is-open"));
+      campo.classList.add("is-open"); botao.setAttribute("aria-expanded", "true");
+      parAberto = { campo, painel, botao };
+      ($(".par__opt[aria-selected=true]", painel) || $(".par__opt", painel)).focus({ preventScroll: true });
+    });
+    // setas para navegar entre as opções
+    painel.addEventListener("keydown", (e) => {
+      const ops = $$(".par__opt", painel), i = ops.indexOf(document.activeElement);
+      if (i < 0) return;
+      const passo = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (passo) { e.preventDefault(); ops[(i + passo + ops.length) % ops.length].focus(); }
+    });
+    return [campo, painel];
+  };
+  const atualizarAcomp = () => {
+    const nao = form.vai.value === "nao";
+    const adultos = nao ? 0 : Math.max(0, (+form.adultos.value || 1) - 1);
+    const criancas = nao ? 0 : Math.max(0, +form.criancas.value || 0);
+    rowAcomp.hidden = adultos + criancas === 0;
+    const atuais = $$(".acomp__item", acompList).map((el) => el.dataset.chave);
+    const desejados = [
+      ...Array.from({ length: adultos }, (_, i) => "adulto-" + (i + 1)),
+      ...Array.from({ length: criancas }, (_, i) => "crianca-" + (i + 1)),
+    ];
+    if (atuais.join() === desejados.join()) return;
+    $$(".acomp__item", acompList).forEach((el) => { if (!desejados.includes(el.dataset.chave)) el.remove(); });
+    desejados.forEach((chave, pos) => {
+      let item = $(`.acomp__item[data-chave="${chave}"]`, acompList);
+      if (!item) {
+        const [tipo, n] = chave.split("-");
+        item = document.createElement("div");
+        item.className = "acomp__item acomp__item--" + tipo;
+        item.dataset.chave = chave;
+        const tag = document.createElement("span");
+        tag.className = "acomp__tag";
+        tag.textContent = tipo === "adulto" ? `Adulto ${+n + 1}` : `Criança ${n}`;
+        item.appendChild(tag);
+        item.appendChild(campoNome(chave, tipo === "adulto" ? "Nome completo" : "Nome da criança"));
+        const [campoPar, painelPar] = campoParentesco(chave, tipo);
+        item.appendChild(campoPar);
+        if (tipo === "crianca") {
+          const idade = document.createElement("div");
+          idade.className = "field field--idade";
+          const idI = "f-idade-" + n + "-" + idCampo++;
+          idade.innerHTML = `<input type="number" id="${idI}" min="0" max="17" inputmode="numeric" placeholder=" " /><label for="${idI}">Idade</label>`;
+          const ii = $("input", idade);
+          ii.dataset.chave = chave + "-idade";
+          ii.value = valoresAcomp[ii.dataset.chave] || "";
+          ii.addEventListener("input", () => { valoresAcomp[ii.dataset.chave] = ii.value; });
+          item.appendChild(idade);
+        }
+        item.appendChild(painelPar);
+      }
+      acompList.insertBefore(item, acompList.children[pos] || null);
+    });
+  };
+  atualizarAcomp();
 
   // Steppers (adultos / crianças)
   $$(".stepper").forEach((st) => {
@@ -384,9 +540,9 @@
       menos.disabled = +input.value <= min; mais.disabled = +input.value >= max;
     };
     $$("button", st).forEach((b) => b.addEventListener("click", () => {
-      input.value = (parseInt(input.value, 10) || 0) + +b.dataset.step; clamp();
+      input.value = (parseInt(input.value, 10) || 0) + +b.dataset.step; clamp(); atualizarAcomp();
     }));
-    input.addEventListener("change", clamp);
+    input.addEventListener("change", () => { clamp(); atualizarAcomp(); });
     clamp();
   });
   form.nome.addEventListener("input", () => form.nome.parentElement.classList.remove("is-invalid"));
@@ -398,6 +554,13 @@
       err.textContent = "Coloque seu nome para a gente saber quem é.";
       form.nome.parentElement.classList.add("is-invalid"); form.nome.focus(); return;
     }
+    const semNome = $$(".acomp__item .field:not(.field--idade):not(.field--select)", acompList).filter((f) => !$("input", f).value.trim());
+    const semPar = $$(".acomp__item .field--select", acompList).filter((f) => !f.dataset.valor);
+    if (form.vai.value === "sim" && (semNome.length || semPar.length)) {
+      err.textContent = "Preencha o nome e o parentesco de todos os acompanhantes.";
+      [...semNome, ...semPar].forEach((f) => f.classList.add("is-invalid"));
+      $("input, button", [...semNome, ...semPar][0]).focus(); return;
+    }
     err.textContent = "";
     const contato = C.contatos[+form.contato.value];
     const vai = form.vai.value === "sim";
@@ -405,9 +568,21 @@
     if (vai) {
       linhas.push(`Quero *confirmar minha presença* no casamento de ${C.noiva} & ${C.noivo}!`, "");
       linhas.push(`👤 Nome: ${nome}`);
+      const nomesDe = (tipo) => $$(`.acomp__item--${tipo}`, acompList).map((item) => {
+        const nomeA = $(".field:not(.field--idade) input", item).value.trim();
+        const idade = $(".field--idade input", item)?.value.trim();
+        const par = ($(".field--select", item).dataset.valor || "").toLowerCase();
+        const extra = [par, idade ? `${idade} ${+idade === 1 ? "ano" : "anos"}` : ""].filter(Boolean).join(", ");
+        return `${nomeA} (${extra})`;
+      });
+      const adultosNomes = nomesDe("adulto"), criancasNomes = nomesDe("crianca");
       linhas.push(`👥 Adultos: ${form.adultos.value || 1}`);
-      if (+form.criancas.value > 0) linhas.push(`🧒 Crianças: ${form.criancas.value}`);
-      if (form.acompanhantes.value.trim()) linhas.push(`📝 Acompanhantes: ${form.acompanhantes.value.trim()}`);
+      linhas.push(`   • ${nome} (eu)`);
+      adultosNomes.forEach((n) => linhas.push(`   • ${n}`));
+      if (criancasNomes.length) {
+        linhas.push(`🧒 Crianças: ${criancasNomes.length}`);
+        criancasNomes.forEach((n) => linhas.push(`   • ${n}`));
+      }
     } else {
       linhas.push(`Aqui é ${nome}. Infelizmente *não poderei comparecer* ao casamento de ${C.noiva} & ${C.noivo}. 😢`);
     }
