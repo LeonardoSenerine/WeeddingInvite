@@ -3,197 +3,284 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Isabella &amp; Murilo · Convite de Casamento</title>
-  <meta name="description" content="Isabella e Murilo convidam para a celebração de seu casamento. Confirme sua presença e veja a lista de presentes." />
-  <meta property="og:title" content="Isabella & Murilo · Convite de Casamento" />
-  <meta property="og:description" content="Você é nosso convidado! Confirme sua presença." />
-  <meta property="og:image" content="assets/convite-original.jpg" />
-  <meta name="theme-color" content="#f3ecdf" />
+  <title>Isabella &amp; Murilo · Casamento</title>
+  <meta name="description" content="Isabella e Murilo vão se casar. Confirme sua presença e veja a lista de presentes." />
+  <meta property="og:title" content="Isabella & Murilo · Casamento" />
+  <meta property="og:description" content="Confirme sua presença." />
+  <meta property="og:image" content="assets/img/casal-noivos.jpg" />
+  <meta name="theme-color" content="#f5efe4" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=14" />
 </head>
 <body>
-  <!-- CAPA / ENVELOPE -->
-  <div class="envelope" id="envelope" role="dialog" aria-label="Abrir convite">
-    <img class="flor flor--tl" src="assets/img/flores/canto-sup-esq.png" alt="" />
-    <img class="flor flor--br" src="assets/img/flores/canto-inf-dir.png" alt="" />
-    <div class="envelope__inner">
-      <p class="caps">Você recebeu um convite</p>
-      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
-      <p class="script envelope__names"><span data-bind="noiva"></span> <small>e</small> <span data-bind="noivo"></span></p>
-      <button class="seal" id="abrir" aria-label="Abrir convite">
-        <span class="script" data-bind="monograma"></span>
-      </button>
-      <p class="caps caps--small">Toque para abrir</p>
-    </div>
-  </div>
-
   <nav class="nav" id="nav">
-    <a href="#inicio" class="nav__brand script" data-bind="monograma"></a>
-    <button class="nav__toggle" aria-label="Menu" aria-expanded="false" id="navToggle">☰</button>
+    <a href="#inicio" class="nav__brand" data-bind="monograma"></a>
+    <button class="nav__toggle" aria-label="Menu" aria-expanded="false" id="navToggle"><span></span><span></span></button>
     <ul class="nav__links" id="navLinks">
-      <li><a href="#historia">O casal</a></li>
-      <li><a href="#evento">O grande dia</a></li>
-      <li><a href="#rsvp">Confirmar presença</a></li>
+      <li><a href="#boas-vindas">Boas-vindas</a></li>
+      <li><a href="#evento">O dia</a></li>
+      <li><a href="#informacoes">Informações</a></li>
+      <li><a href="#rsvp">Presença</a></li>
       <li><a href="#presentes">Presentes</a></li>
     </ul>
   </nav>
 
-  <!-- HERO: réplica do convite -->
+  <!-- TOPO -->
   <header class="hero" id="inicio">
-    <img class="flor flor--tl" src="assets/img/flores/canto-sup-esq.png" alt="" />
-    <img class="flor flor--tr" src="assets/img/flores/canto-sup-dir.png" alt="" />
-    <img class="flor flor--bl" src="assets/img/flores/canto-inf-esq.png" alt="" />
-    <img class="flor flor--br" src="assets/img/flores/canto-inf-dir.png" alt="" />
-    <div class="hero__frame">
-      <p class="caps">Com a bênção de Deus<br />e de seus pais</p>
-      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
-      <h1 class="script hero__names">
-        <span data-bind="noiva"></span>
-        <span class="hero__e">e</span>
-        <span data-bind="noivo"></span>
-      </h1>
-      <p class="caps caps--lg">Convidam para a celebração<br />de seu casamento</p>
-      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
-      <div class="date-block">
-        <span class="date-block__side" data-bind="diaSemana"></span>
-        <span class="date-block__mid">
-          <strong data-bind="dia"></strong>
-          <span data-bind="mes"></span>
-        </span>
-        <span class="date-block__side" data-bind="horaCurta"></span>
+    <div class="hero__frame" aria-hidden="true"></div>
+    <img class="flor flor--hero-tl" src="assets/img/flores/canto-sup-esq.png" alt="" />
+
+    <div class="hero__grid">
+      <div class="hero__text">
+        <p class="eyebrow">Vamos nos casar</p>
+        <h1 class="hero__names">
+          <span data-bind="noiva"></span>
+          <em class="amp">&amp;</em>
+          <span data-bind="noivo"></span>
+        </h1>
+        <span class="rule" aria-hidden="true"></span>
+        <p class="hero__date" data-bind="dataLonga"></p>
+        <p class="hero__place"><span data-bind="diaSemanaCap"></span>, às <span data-bind="horaCurta"></span> · <span data-bind="localNome"></span></p>
+        <div class="hero__actions">
+          <a href="#rsvp" class="btn">Confirmar presença</a>
+          <a href="#evento" class="btn btn--ghost">Ver detalhes</a>
+        </div>
       </div>
-      <p class="caps local-label">Local</p>
-      <p class="script local-name" data-bind="localNome"></p>
-      <div class="countdown" id="countdown" aria-live="polite">
-        <div><strong data-cd="d">0</strong><span>dias</span></div>
-        <div><strong data-cd="h">0</strong><span>horas</span></div>
-        <div><strong data-cd="m">0</strong><span>min</span></div>
-        <div><strong data-cd="s">0</strong><span>seg</span></div>
-      </div>
-      <a href="#rsvp" class="btn">Confirmar presença</a>
+
+      <figure class="hero__photo">
+        <div class="hero__slides" id="heroSlides"></div>
+        <img class="flor flor--photo" src="assets/img/flores/canto-inf-dir.png" alt="" />
+      </figure>
     </div>
   </header>
 
+  <!-- CONTAGEM -->
+  <section class="countdown" aria-label="Contagem regressiva">
+    <p class="eyebrow">Contagem regressiva para o grande dia</p>
+    <div class="countdown__grid" id="countdown">
+      <div><strong data-cd="d">0</strong><span data-cd-label="d">dias</span></div>
+      <div><strong data-cd="h">00</strong><span data-cd-label="h">horas</span></div>
+      <div><strong data-cd="m">00</strong><span data-cd-label="m">minutos</span></div>
+      <div><strong data-cd="s">00</strong><span data-cd-label="s">segundos</span></div>
+    </div>
+  </section>
+
   <main>
-    <!-- HISTÓRIA / GALERIA -->
-    <section class="section" id="historia">
-      <p class="caps">Nossa história</p>
-      <h2 class="section__title script">Dois caminhos, um só destino</h2>
-      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
-      <p class="section__lead">
-        Entre pores do sol, águas de coco e muitas risadas, descobrimos que a vida é
-        melhor quando vivida lado a lado. Agora queremos dar o próximo passo — e
-        seria uma alegria enorme ter você com a gente nesse dia.
-      </p>
-      <div class="gallery" id="galeria"></div>
+    <!-- BOAS-VINDAS -->
+    <section class="section" id="boas-vindas">
+      <div class="welcome">
+        <figure class="welcome__photo">
+          <img src="assets/img/casal-retrato.jpg" alt="Isabella e Murilo abraçados" loading="lazy" />
+        </figure>
+        <div class="welcome__text">
+          <p class="eyebrow">Boas-vindas</p>
+          <h2 class="title">Que alegria ter você aqui.</h2>
+          <span class="rule" aria-hidden="true"></span>
+          <p>
+            Se você recebeu este link, é porque faz parte da nossa história. Foram muitos
+            pores do sol, águas de coco, passeios e risadas até chegarmos aqui, e em cada um
+            desses momentos tinha alguém querido por perto. Agora queremos você por perto
+            no dia mais importante das nossas vidas.
+          </p>
+          <p>
+            Preparamos esta página com tudo o que você precisa saber: data, horário, local,
+            a programação do dia, algumas dicas e a lista de presentes. Pedimos só uma coisa:
+            <strong>confirme sua presença</strong> para organizarmos tudo com carinho.
+          </p>
+          <p class="signature">Com amor, <span data-bind="noiva"></span> &amp; <span data-bind="noivo"></span></p>
+        </div>
+      </div>
     </section>
 
-    <!-- EVENTO -->
+    <!-- HISTÓRIA -->
+    <section class="section section--center" id="historia">
+      <p class="eyebrow">Nossa história</p>
+      <h2 class="title">Dois caminhos, um só destino</h2>
+      <span class="rule rule--center" aria-hidden="true"></span>
+      <p class="lead">
+        A gente se encontrou do jeito mais simples e, desde então, tudo ficou mais leve.
+        Entre festas, passeios e fins de tarde ao ar livre, fomos descobrindo que a vida é
+        melhor quando é vivida lado a lado. Aqui estão alguns dos nossos momentos favoritos.
+      </p>
+      <div class="carousel" id="galeria" aria-roledescription="carrossel">
+        <div class="carousel__track"></div>
+        <button class="carousel__arrow carousel__arrow--prev" type="button" aria-label="Foto anterior">‹</button>
+        <button class="carousel__arrow carousel__arrow--next" type="button" aria-label="Próxima foto">›</button>
+        <div class="carousel__dots" role="tablist"></div>
+      </div>
+    </section>
+
+    <!-- O DIA -->
     <section class="section section--tinted" id="evento">
-      <p class="caps">O grande dia</p>
-      <h2 class="section__title script">Cerimônia &amp; Recepção</h2>
-      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
-      <div class="cards" id="cards">
-        <article class="card">
-          <p class="caps caps--small">Quando</p>
-          <p class="card__main" data-bind="dataExtenso"></p>
-          <p class="muted" data-bind="hora"></p>
-          <a class="link" id="addCalendar" target="_blank" rel="noopener">Adicionar à agenda</a>
-        </article>
-        <article class="card">
-          <p class="caps caps--small">Onde</p>
-          <p class="card__main script card__script" data-bind="localNome"></p>
-          <p class="muted" data-bind="localEndereco"></p>
-          <a class="link" id="mapLink" target="_blank" rel="noopener">Como chegar</a>
-        </article>
-        <article class="card" id="cardTraje">
-          <p class="caps caps--small">Traje</p>
-          <p class="card__main" data-bind="traje"></p>
-          <p class="muted" data-bind="trajeObs"></p>
-        </article>
+      <img class="flor flor--sec-tr" src="assets/img/flores/canto-sup-dir.png" alt="" />
+      <div class="section__inner section--center">
+        <p class="eyebrow">O grande dia</p>
+        <h2 class="title">Cerimônia &amp; Recepção</h2>
+        <span class="rule rule--center" aria-hidden="true"></span>
+        <p class="lead">
+          A cerimônia e a festa acontecem no mesmo lugar, então é só chegar e aproveitar.
+          Veja abaixo onde e quando, e como vai ser o nosso dia.
+        </p>
+
+        <div class="details">
+          <article>
+            <p class="details__label">Quando</p>
+            <p class="details__main" data-bind="dataExtenso"></p>
+            <p class="details__sub">Cerimônia às <span data-bind="horaCurta"></span></p>
+            <a class="btn btn--small" id="addCalendar" target="_blank" rel="noopener">Salvar na agenda</a>
+          </article>
+          <article>
+            <p class="details__label">Onde</p>
+            <p class="details__main" data-bind="localNome"></p>
+            <p class="details__sub" data-bind="localEndereco"></p>
+            <a class="btn btn--small" id="mapLink" target="_blank" rel="noopener">Como chegar</a>
+          </article>
+          <article id="cardTraje">
+            <p class="details__label">Traje</p>
+            <p class="details__main" data-bind="traje"></p>
+            <p class="details__sub" data-bind="trajeObs"></p>
+          </article>
+        </div>
+
+        <h3 class="subtitle">Programação</h3>
+        <ol class="timeline" id="programa"></ol>
+
+        <div class="venue" id="venue" hidden>
+          <h3 class="subtitle">Conheça o espaço</h3>
+          <div class="venue__grid" id="venueGrid"></div>
+        </div>
       </div>
-      <div class="venue" id="venue" hidden>
-        <h3 class="venue__title script">Conheça o espaço</h3>
-        <div class="venue__grid" id="venueGrid"></div>
-      </div>
+    </section>
+
+    <!-- INFORMAÇÕES -->
+    <section class="section section--center" id="informacoes">
+      <p class="eyebrow">Para você se programar</p>
+      <h2 class="title">Informações importantes</h2>
+      <span class="rule rule--center" aria-hidden="true"></span>
+      <div class="infos" id="infos"></div>
     </section>
 
     <!-- RSVP -->
-    <section class="section" id="rsvp">
-      <p class="caps">Confirmação</p>
-      <h2 class="section__title script">Confirme sua presença</h2>
-      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
-      <p class="section__lead">
-        <span id="prazoTexto">Pedimos, por gentileza, que confirme até <strong data-bind="prazo"></strong>. </span>
-        Ao enviar, abriremos o WhatsApp com sua mensagem pronta.
-      </p>
-      <form class="rsvp" id="rsvpForm" novalidate>
-        <label>
-          Seu nome completo
-          <input type="text" name="nome" required autocomplete="name" placeholder="Ex.: Maria Silva" />
-        </label>
-        <fieldset class="choice">
-          <legend>Você vai?</legend>
-          <label><input type="radio" name="vai" value="sim" checked /> Sim, estarei lá!</label>
-          <label><input type="radio" name="vai" value="nao" /> Infelizmente não poderei ir</label>
-        </fieldset>
-        <div class="row" id="rowQtd">
-          <label>
-            Adultos (incluindo você)
-            <input type="number" name="adultos" min="1" max="10" value="1" />
-          </label>
-          <label>
-            Crianças
-            <input type="number" name="criancas" min="0" max="10" value="0" />
-          </label>
+    <section class="section section--tinted" id="rsvp">
+      <img class="flor flor--sec-bl" src="assets/img/flores/canto-inf-esq.png" alt="" />
+      <div class="section__inner rsvp-wrap">
+        <div class="rsvp-intro">
+          <p class="eyebrow">Confirmação</p>
+          <h2 class="title">Confirme sua presença</h2>
+          <span class="rule" aria-hidden="true"></span>
+          <p>
+            <span id="prazoTexto">Pedimos que confirme até <strong data-bind="prazo"></strong>. </span>
+            Sua resposta ajuda muito na organização: é com ela que definimos lugares,
+            buffet e bebidas.
+          </p>
+          <p>
+            Preencha o formulário e toque em <strong>Enviar pelo WhatsApp</strong>. A mensagem
+            já vai pronta, é só apertar enviar na conversa que abrir.
+          </p>
+          <p class="muted" id="contatosTexto"></p>
         </div>
-        <label>
-          Nomes dos acompanhantes <span class="muted">(opcional)</span>
-          <input type="text" name="acompanhantes" placeholder="Ex.: João Silva, Ana Silva" />
-        </label>
-        <label>
-          Recado para os noivos <span class="muted">(opcional)</span>
-          <textarea name="recado" rows="3" placeholder="Deixe uma mensagem carinhosa…"></textarea>
-        </label>
-        <fieldset class="choice">
-          <legend>Enviar confirmação para</legend>
-          <div id="contatosRadios"></div>
-        </fieldset>
-        <p class="form__error" id="formError" role="alert"></p>
-        <button type="submit" class="btn btn--block">Enviar pelo WhatsApp</button>
-      </form>
-      <p class="muted small center" id="contatosTexto"></p>
+
+        <form class="rsvp" id="rsvpForm" novalidate>
+          <div class="field">
+            <input type="text" id="f-nome" name="nome" required autocomplete="name" placeholder=" " />
+            <label for="f-nome">Seu nome completo</label>
+          </div>
+
+          <fieldset class="seg">
+            <legend>Você vem?</legend>
+            <div class="seg__opts">
+              <label><input type="radio" name="vai" value="sim" checked /><span>Sim, estarei lá</span></label>
+              <label><input type="radio" name="vai" value="nao" /><span>Não poderei ir</span></label>
+            </div>
+          </fieldset>
+
+          <div class="steppers" id="rowQtd">
+            <div class="stepper">
+              <span class="stepper__label">Adultos <small>(com você)</small></span>
+              <div class="stepper__ctrl">
+                <button type="button" data-step="-1" aria-label="Menos um adulto">−</button>
+                <input type="number" name="adultos" min="1" max="10" value="1" inputmode="numeric" aria-label="Adultos" />
+                <button type="button" data-step="1" aria-label="Mais um adulto">+</button>
+              </div>
+            </div>
+            <div class="stepper">
+              <span class="stepper__label">Crianças</span>
+              <div class="stepper__ctrl">
+                <button type="button" data-step="-1" aria-label="Menos uma criança">−</button>
+                <input type="number" name="criancas" min="0" max="10" value="0" inputmode="numeric" aria-label="Crianças" />
+                <button type="button" data-step="1" aria-label="Mais uma criança">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field" id="rowAcomp">
+            <input type="text" id="f-acomp" name="acompanhantes" placeholder=" " />
+            <label for="f-acomp">Nomes de quem vem com você <small>(opcional)</small></label>
+          </div>
+
+          <div class="field">
+            <textarea id="f-recado" name="recado" rows="2" placeholder=" "></textarea>
+            <label for="f-recado">Um recado para os noivos <small>(opcional)</small></label>
+          </div>
+
+          <fieldset class="giftpick" id="giftPick">
+            <legend>Presente <small>(opcional)</small></legend>
+            <p class="giftpick__hint">
+              Já sabe o que vai dar? Marque abaixo e o presente vai junto na mensagem,
+              assim a gente consegue evitar presentes repetidos.
+            </p>
+            <div class="giftpick__cats" id="giftPickCats" role="tablist"></div>
+            <div class="giftpick__items" id="giftPickItems"></div>
+            <div class="field">
+              <input type="text" id="f-outro" name="presenteOutro" placeholder=" " />
+              <label for="f-outro">Outro presente <small>(se não estiver na lista)</small></label>
+            </div>
+            <p class="giftpick__summary" id="giftPickSummary" aria-live="polite"></p>
+          </fieldset>
+
+          <fieldset class="seg seg--small">
+            <legend>Enviar confirmação para</legend>
+            <div class="seg__opts" id="contatosRadios"></div>
+          </fieldset>
+
+          <p class="form__error" id="formError" role="alert"></p>
+          <button type="submit" class="btn btn--block">Enviar pelo WhatsApp</button>
+        </form>
+      </div>
     </section>
 
     <!-- PRESENTES -->
-    <section class="section section--tinted" id="presentes">
-      <p class="caps">Lista de presentes</p>
-      <h2 class="section__title script">Sugestões para o nosso lar</h2>
-      <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
-      <p class="section__lead">
-        Sua presença é o nosso maior presente! Mas, se quiser nos presentear,
-        separamos sugestões úteis que vamos usar bastante no dia a dia.
+    <section class="section section--center" id="presentes">
+      <p class="eyebrow">Lista de presentes</p>
+      <h2 class="title">Sugestões para o nosso lar</h2>
+      <span class="rule rule--center" aria-hidden="true"></span>
+      <p class="lead">
+        Sua presença é o nosso maior presente! Mas, se quiser nos presentear, separamos
+        sugestões de coisas que vamos usar bastante na casa nova. Escolha uma categoria:
       </p>
       <div class="tabs" role="tablist" id="giftTabs"></div>
-      <div class="gifts" id="giftList"></div>
-      <div class="tip">
-        <strong>Dica:</strong> <span data-bind="dica"></span>
-      </div>
+      <ul class="gifts" id="giftList"></ul>
+      <p class="gifts__note">Toque em <strong>Vou dar</strong> para reservar o presente na sua confirmação de presença.</p>
+      <p class="tip"><strong>Dica:</strong> <span data-bind="dica"></span></p>
       <div class="pix" id="pixBox" hidden>
-        <p>Prefere presentear via Pix?</p>
+        <span class="pix__label">Prefere Pix?</span>
         <code id="pixKey"></code>
-        <button class="btn btn--ghost" id="copyPix" type="button">Copiar chave</button>
+        <button class="btn btn--small" id="copyPix" type="button">Copiar chave</button>
       </div>
     </section>
   </main>
 
+  <section class="ribbon" aria-label="Fotos do casal">
+    <p class="ribbon__title">Nos vemos lá</p>
+    <div class="ribbon__track" id="ribbon"></div>
+  </section>
+
   <footer class="footer">
-    <p class="script footer__names"><span data-bind="noiva"></span> e <span data-bind="noivo"></span></p>
-    <p class="caps caps--small" data-bind="dataCurta"></p>
-    <p class="small footer__love">Feito com amor ♥</p>
+    <p class="footer__msg">Mal podemos esperar para celebrar com você.</p>
+    <p class="footer__names"><span data-bind="noiva"></span> <em class="amp">&amp;</em> <span data-bind="noivo"></span></p>
+    <p class="eyebrow" data-bind="dataCurta"></p>
   </footer>
 
   <div class="lightbox" id="lightbox" hidden>
@@ -201,7 +288,7 @@
     <img alt="" />
   </div>
 
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+  <script src="config.js?v=14"></script>
+  <script src="script.js?v=14"></script>
 </body>
 </html>
