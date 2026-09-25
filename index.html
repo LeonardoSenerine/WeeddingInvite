@@ -3,16 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Isabella &amp; Murilo · Casamento</title>
-  <meta name="description" content="Isabella e Murilo vão se casar. Confirme sua presença e veja a lista de presentes." />
-  <meta property="og:title" content="Isabella & Murilo · Casamento" />
-  <meta property="og:description" content="Confirme sua presença." />
-  <meta property="og:image" content="assets/img/casal-noivos.jpg" />
-  <meta name="theme-color" content="#f5efe4" />
+  <title>Isabella &amp; Murilo · Vamos nos casar! 07/11/2026</title>
+  <meta name="description" content="Isabella e Murilo vão se casar! Sábado, 7 de novembro de 2026, às 16h30, na Chácara Recanto Moenda. Veja a programação, conheça o espaço, confirme sua presença e escolha um presente." />
+  <meta name="theme-color" content="#8a1a1c" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="canonical" href="https://leonardosenerine.github.io/WeeddingInvite/" />
+
+  <!-- Capa do link (WhatsApp, Instagram, Facebook etc.) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Isabella &amp; Murilo" />
+  <meta property="og:url" content="https://leonardosenerine.github.io/WeeddingInvite/" />
+  <meta property="og:title" content="Isabella &amp; Murilo | Vamos nos casar! 💍 07.11.2026" />
+  <meta property="og:description" content="Você está convidado! Sábado, 7 de novembro, às 16h30, na Chácara Recanto Moenda. Toque para ver tudo e confirmar sua presença." />
+  <meta property="og:image" content="https://leonardosenerine.github.io/WeeddingInvite/assets/capa-link.jpg?v=2" />
+  <meta property="og:image:secure_url" content="https://leonardosenerine.github.io/WeeddingInvite/assets/capa-link.jpg?v=2" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Vamos nos casar. Isabella &amp; Murilo, sábado, 07 de novembro, 16h30, na Chácara Recanto Moenda." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Isabella &amp; Murilo | Vamos nos casar! 💍 07.11.2026" />
+  <meta name="twitter:description" content="Você está convidado! Sábado, 7 de novembro, às 16h30, na Chácara Recanto Moenda." />
+  <meta name="twitter:image" content="https://leonardosenerine.github.io/WeeddingInvite/assets/capa-link.jpg?v=2" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=14" />
+  <link rel="stylesheet" href="styles.css?v=18" />
 </head>
 <body>
   <nav class="nav" id="nav">
@@ -21,6 +41,7 @@
     <ul class="nav__links" id="navLinks">
       <li><a href="#boas-vindas">Boas-vindas</a></li>
       <li><a href="#evento">O dia</a></li>
+      <li><a href="#local">O lugar</a></li>
       <li><a href="#informacoes">Informações</a></li>
       <li><a href="#rsvp">Presença</a></li>
       <li><a href="#presentes">Presentes</a></li>
@@ -147,11 +168,27 @@
         <h3 class="subtitle">Programação</h3>
         <ol class="timeline" id="programa"></ol>
 
-        <div class="venue" id="venue" hidden>
-          <h3 class="subtitle">Conheça o espaço</h3>
-          <div class="venue__grid" id="venueGrid"></div>
-        </div>
       </div>
+    </section>
+
+    <!-- O LUGAR -->
+    <section class="section section--center" id="local" hidden>
+      <p class="eyebrow">O lugar</p>
+      <h2 class="title">Conheça o espaço</h2>
+      <span class="rule rule--center" aria-hidden="true"></span>
+      <p class="lead">
+        A <strong data-bind="localNome"></strong> é cercada de verde: a cerimônia acontece ao ar livre,
+        no gramado entre as árvores, e a festa segue no salão, pertinho dali. Tem ainda piscina
+        e churrasqueira. Dá uma olhada em como é o lugar.
+      </p>
+      <div class="carousel carousel--local" id="venue" aria-roledescription="carrossel">
+        <div class="carousel__track"></div>
+        <button class="carousel__arrow carousel__arrow--prev" type="button" aria-label="Foto anterior">‹</button>
+        <button class="carousel__arrow carousel__arrow--next" type="button" aria-label="Próxima foto">›</button>
+        <div class="carousel__dots" role="tablist"></div>
+      </div>
+      <p class="carousel__caption" id="venueCaption" aria-live="polite"></p>
+      <a class="btn btn--ghost local__map" id="mapLink2" target="_blank" rel="noopener">Ver no mapa</a>
     </section>
 
     <!-- INFORMAÇÕES -->
@@ -288,7 +325,7 @@
     <img alt="" />
   </div>
 
-  <script src="config.js?v=14"></script>
-  <script src="script.js?v=14"></script>
+  <script src="config.js?v=18"></script>
+  <script src="script.js?v=18"></script>
 </body>
 </html>

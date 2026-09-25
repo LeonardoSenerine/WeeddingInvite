@@ -30,7 +30,6 @@
     trajeObs: C.trajeObs,
   };
   $$("[data-bind]").forEach((el) => { el.textContent = binds[el.dataset.bind] ?? ""; });
-  document.title = `${C.noiva} & ${C.noivo} · Casamento`;
 
   $("#mapLink").href = mapa;
   $("#prazoTexto").hidden = !prazo;
@@ -155,7 +154,7 @@
   }
 
   // ---------- Carrossel da galeria ----------
-  const carrossel = (root, fotos) => {
+  const carrossel = (root, fotos, aoMudar) => {
     const track = $(".carousel__track", root), dots = $(".carousel__dots", root);
     fotos.forEach((f, i) => {
       const b = document.createElement("button");
@@ -189,6 +188,7 @@
         const d = Math.abs(s.offsetLeft + s.clientWidth / 2 - centro);
         if (d < dist) { dist = d; melhor = i; }
       });
+      if (aoMudar && melhor !== indice) aoMudar(fotos[melhor]);
       indice = melhor;
       slides.forEach((s, i) => s.classList.toggle("is-active", i === melhor));
       bolinhas.forEach((b, i) => b.setAttribute("aria-selected", i === melhor));
@@ -230,7 +230,7 @@
     };
     track.addEventListener("touchstart", pausar, { passive: true });
     window.addEventListener("resize", () => ir(indice));
-    requestAnimationFrame(() => { ir(0); marcar(); });
+    requestAnimationFrame(() => { ir(0); marcar(); if (aoMudar) aoMudar(fotos[0]); });
     auto();
   };
   carrossel($("#galeria"), C.galeria);
@@ -250,8 +250,10 @@
     ribbon.appendChild(grupo);
   });
   if (C.fotosLocal.length) {
-    $("#venue").hidden = false;
-    fillGallery($("#venueGrid"), C.fotosLocal);
+    $("#local").hidden = false;
+    $("#mapLink2").href = mapa;
+    const legenda = $("#venueCaption");
+    carrossel($("#venue"), C.fotosLocal, (f) => { legenda.textContent = f.alt; });
   }
 
   // ---------- Presentes escolhidos (compartilhado entre a lista e o formulário) ----------
@@ -467,7 +469,7 @@
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); } });
   }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
-  $$(".welcome__text, .section > .eyebrow, .section > .title, .section__inner > .eyebrow, .section__inner > .title, .rsvp-intro > *, .lead, .carousel, .rsvp, .tabs, .gifts__note, .tip, .subtitle, .ribbon__title")
+  $$(".welcome__text, .section > .eyebrow, .section > .title, .section__inner > .eyebrow, .section__inner > .title, .rsvp-intro > *, .lead, .carousel, .rsvp, .tabs, .gifts__note, .tip, .subtitle, .ribbon__title, .local__map")
     .forEach((el) => { el.classList.add("reveal"); io.observe(el); });
   $$(".rule").forEach((el) => { el.classList.add("reveal-rule"); io.observe(el); });
   // (a foto recortada não é detectada pelo observer, então observamos o bloco em volta)

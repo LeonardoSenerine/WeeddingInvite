@@ -583,3 +583,9 @@ figure { margin: 0; }
 .gift.is-picked .gift__pick { background: var(--wine); border-color: var(--wine); color: var(--paper); }
 .gift.is-picked .gift__name { color: var(--wine); }
 .gifts__note { margin: 1.75rem auto 0; font-size: 0.98rem; color: var(--muted); }
+
+/* O LUGAR */
+.carousel__caption { margin: 1rem auto 0; min-height: 1.6em; font: italic 500 1.25rem/1.4 var(--serif); color: var(--muted); }
+.local__map { margin-top: 1.5rem; }
+.carousel--local .carousel__slide { aspect-ratio: 16 / 10; }
+.carousel--local .carousel__slide img { object-position: center; }

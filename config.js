@@ -115,6 +115,14 @@ window.CONVITE = {
 
   // Fotos do local (coloque os arquivos em assets/img/local/ e liste aqui)
   fotosLocal: [
-    // { src: "assets/img/local/cerimonia.jpg", alt: "Espaço da cerimônia ao ar livre" },
+    { src: "assets/img/local/cerimonia.jpg", alt: "A cerimônia ao ar livre, no gramado entre as árvores" },
+    { src: "assets/img/local/salao-festas.jpg", alt: "O salão de festas, amplo e bem iluminado" },
+    { src: "assets/img/local/area-externa.jpg", alt: "A área externa, com palmeiras e varanda" },
+    { src: "assets/img/local/area-coberta.jpg", alt: "A área coberta com mesas" },
+    { src: "assets/img/local/churrasqueira.jpg", alt: "A churrasqueira" },
+    { src: "assets/img/local/piscina.jpg", alt: "A piscina" },
+    { src: "assets/img/local/gramado.jpg", alt: "O gramado cercado de verde" },
+    { src: "assets/img/local/dormitorio.jpg", alt: "O dormitório" },
+    { src: "assets/img/local/entrada.jpg", alt: "A entrada da chácara" },
   ],
 };
