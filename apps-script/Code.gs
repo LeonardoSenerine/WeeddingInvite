@@ -29,10 +29,12 @@ const CABECALHOS = {
 // ---------------------------------------------------------------- HTTP
 
 function doGet(e) {
-  const acao = (e.parameter.acao || "presentes");
+  // Rodando pelo botão "Executar" do editor não existe "e": só testa a leitura
+  const p = (e && e.parameter) || {};
+  const acao = p.acao || "presentes";
   if (acao === "presentes") return json({ ok: true, reservados: presentesReservados() });
   if (acao === "lista") {
-    if (e.parameter.senha !== SENHA_ADMIN) return json({ ok: false, erro: "senha" });
+    if (p.senha !== SENHA_ADMIN) return json({ ok: false, erro: "senha" });
     return json({
       ok: true,
       confirmacoes: linhas(ABA_CONFIRMACOES),
@@ -45,6 +47,7 @@ function doGet(e) {
 
 function doPost(e) {
   let d;
+  if (!e || !e.postData) return json({ ok: false, erro: "Use o site para enviar. Pelo editor, execute a função configurar." });
   try { d = JSON.parse(e.postData.contents); } catch (err) { return json({ ok: false, erro: "json" }); }
   if (!d || !d.id || !String(d.nome || "").trim()) return json({ ok: false, erro: "dados" });
 

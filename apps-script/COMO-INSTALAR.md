@@ -15,7 +15,8 @@ Com isto instalado:
 5. Clique em **Salvar** (ícone de disquete).
 
 ## 2. Autorizar e criar as abas
-1. No topo do editor, escolha a função **`configurar`** e clique em **Executar**.
+1. No topo do editor, ao lado de **Executar**, troque a função para **`configurar`** e clique em **Executar**.
+   (Não execute `doGet` nem `doPost` pelo editor: elas só funcionam quando o site chama.)
 2. O Google vai pedir autorização: **Revisar permissões → sua conta → Avançado →
    Acessar (não seguro) → Permitir**. (O aviso aparece porque o script é de vocês, não de uma empresa verificada.)
 3. Volte para a planilha: devem aparecer as abas **Confirmações**, **Convidados** e **Presentes**.
