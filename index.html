@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=26" />
+  <link rel="stylesheet" href="styles.css?v=27" />
 </head>
 <body>
   <nav class="nav" id="nav">
@@ -333,12 +333,27 @@
     <p class="eyebrow" data-bind="dataCurta"></p>
   </footer>
 
+  <dialog class="modal" id="compraModal" aria-labelledby="compraTitulo">
+    <span class="modal__icon" aria-hidden="true">♥</span>
+    <p class="eyebrow">Presente escolhido</p>
+    <h3 class="modal__title" id="compraTitulo">Quer comprar agora pela internet?</h3>
+    <p class="modal__item" id="compraItem"></p>
+    <p class="modal__text">
+      Podemos abrir o <span id="compraLoja"></span> já com a busca desse presente.
+      Ele fica reservado para você quando enviar a confirmação de presença.
+    </p>
+    <div class="modal__actions">
+      <a class="btn" id="compraSim" target="_blank" rel="noopener">Sim, ver na loja</a>
+      <button type="button" class="btn btn--ghost" id="compraNao">Não, obrigado</button>
+    </div>
+  </dialog>
+
   <div class="lightbox" id="lightbox" hidden>
     <button class="lightbox__close" aria-label="Fechar">×</button>
     <img alt="" />
   </div>
 
-  <script src="config.js?v=26"></script>
-  <script src="script.js?v=26"></script>
+  <script src="config.js?v=27"></script>
+  <script src="script.js?v=27"></script>
 </body>
 </html>
