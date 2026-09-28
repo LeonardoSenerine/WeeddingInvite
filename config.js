@@ -50,7 +50,7 @@ window.CONVITE = {
   // Endereço do "Aplicativo da Web" do Google Apps Script (veja apps-script/COMO-INSTALAR.md).
   // Com ele preenchido, as confirmações vão para a planilha e os presentes escolhidos
   // ficam indisponíveis para os outros. Vazio = confirmação só pelo WhatsApp.
-  planilhaUrl: "",
+  planilhaUrl: "https://script.google.com/macros/s/AKfycbyUx-iF3NzbNjefmPeAs8EzgTu4lkga4d40B-v1hH09StCYH_kdQ8YKFT7H-c2oHuPL/exec",
 
   contatos: [
     { nome: "Amanda", telefone: "5511989451945", exibicao: "(11) 98945-1945" },
