@@ -6,6 +6,9 @@
   <title>Isabella &amp; Murilo · Vamos nos casar! 07/11/2026</title>
   <meta name="description" content="Isabella e Murilo vão se casar! Sábado, 7 de novembro de 2026, às 16h30, na Chácara Recanto Moenda. Veja a programação, conheça o espaço, confirme sua presença e escolha um presente." />
   <meta name="theme-color" content="#8a1a1c" />
+  <!-- Só modo claro: impede o navegador de escurecer o site automaticamente -->
+  <meta name="color-scheme" content="only light" />
+  <meta name="supported-color-schemes" content="light" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
@@ -32,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=24" />
+  <link rel="stylesheet" href="styles.css?v=26" />
 </head>
 <body>
   <nav class="nav" id="nav">
@@ -212,7 +215,7 @@
             Sua resposta ajuda muito na organização: é com ela que definimos lugares,
             buffet e bebidas.
           </p>
-          <p>
+          <p id="rsvpComo">
             Preencha o formulário e toque em <strong>Enviar pelo WhatsApp</strong>. A mensagem
             já vai pronta, é só apertar enviar na conversa que abrir.
           </p>
@@ -266,8 +269,8 @@
           <fieldset class="giftpick" id="giftPick">
             <legend>Presente <small>(opcional)</small></legend>
             <p class="giftpick__hint">
-              Já sabe o que vai dar? Marque abaixo e o presente vai junto na mensagem,
-              assim a gente consegue evitar presentes repetidos.
+              Já sabe o que vai dar? Marque abaixo e o presente fica reservado para você.
+              Os que aparecem riscados já foram escolhidos por outro convidado.
             </p>
             <div class="giftpick__cats" id="giftPickCats" role="tablist"></div>
             <div class="giftpick__items" id="giftPickItems"></div>
@@ -278,14 +281,23 @@
             <p class="giftpick__summary" id="giftPickSummary" aria-live="polite"></p>
           </fieldset>
 
-          <fieldset class="seg seg--small">
+          <fieldset class="seg seg--small" id="contatosFs">
             <legend>Enviar confirmação para</legend>
             <div class="seg__opts" id="contatosRadios"></div>
           </fieldset>
 
           <p class="form__error" id="formError" role="alert"></p>
-          <button type="submit" class="btn btn--block">Enviar pelo WhatsApp</button>
+          <button type="submit" class="btn btn--block" id="rsvpSubmit">Enviar pelo WhatsApp</button>
         </form>
+
+        <div class="rsvp rsvp-done" id="rsvpDone" hidden aria-live="polite">
+          <span class="rsvp-done__icon" aria-hidden="true">♥</span>
+          <h3 class="rsvp-done__title" id="rsvpDoneTitle"></h3>
+          <p id="rsvpDoneText"></p>
+          <p class="muted">Se quiser, avise também pelo WhatsApp (opcional):</p>
+          <div class="rsvp-done__whats" id="rsvpDoneWhats"></div>
+          <button type="button" class="link-btn" id="rsvpEditar">Corrigir minha resposta</button>
+        </div>
       </div>
     </section>
 
@@ -300,7 +312,7 @@
       </p>
       <div class="tabs" role="tablist" id="giftTabs"></div>
       <ul class="gifts" id="giftList"></ul>
-      <p class="gifts__note">Toque em <strong>Vou dar</strong> para reservar o presente na sua confirmação de presença.</p>
+      <p class="gifts__note">Toque em <strong>Vou dar</strong> para reservar o presente na sua confirmação de presença. Os riscados já foram escolhidos.</p>
       <p class="tip"><strong>Dica:</strong> <span data-bind="dica"></span></p>
       <div class="pix" id="pixBox" hidden>
         <span class="pix__label">Prefere Pix?</span>
@@ -326,7 +338,7 @@
     <img alt="" />
   </div>
 
-  <script src="config.js?v=24"></script>
-  <script src="script.js?v=24"></script>
+  <script src="config.js?v=26"></script>
+  <script src="script.js?v=26"></script>
 </body>
 </html>
