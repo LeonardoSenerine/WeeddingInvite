@@ -60,6 +60,14 @@ window.CONVITE = {
   // Chave Pix para quem preferir presentear em dinheiro (deixe vazio para ocultar)
   pix: "",
 
+  // Loja aberta quando o convidado escolhe um presente ({termo} = nome do presente).
+  // Deixe busca vazia para não perguntar.
+  lojaOnline: {
+    nome: "Mercado Livre",
+    busca: "https://lista.mercadolivre.com.br/{termo}",
+    semLoja: ["Vale-presente"], // presentes que não abrem a pergunta
+  },
+
   // Lista de presentes (sugestões)
   presentes: [
     {

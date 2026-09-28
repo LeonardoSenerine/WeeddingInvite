@@ -264,9 +264,35 @@
   const redesenhar = () => onEscolha.forEach((fn) => fn());
   const alternar = (item) => {
     if (reservados.has(item)) return;
-    escolhidos.has(item) ? escolhidos.delete(item) : escolhidos.add(item);
+    const marcou = !escolhidos.has(item);
+    marcou ? escolhidos.add(item) : escolhidos.delete(item);
     redesenhar();
+    if (marcou) perguntarCompra(item);
   };
+
+  // ---------- Modal "quer comprar online?" ----------
+  const loja = C.lojaOnline || {};
+  const modalCompra = $("#compraModal");
+  const perguntarCompra = (item) => {
+    if (!loja.busca || !modalCompra?.showModal || (loja.semLoja || []).includes(item)) return;
+    // "Air fryer (se o orçamento permitir)" → busca só por "Air fryer"
+    const termo = item.replace(/\s*\(.*?\)\s*/g, " ").trim();
+    const slug = termo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    $("#compraItem").textContent = item;
+    $("#compraLoja").textContent = loja.nome;
+    const sim = $("#compraSim");
+    sim.href = loja.busca.replace("{termo}", slug);
+    sim.textContent = "Sim, ver no " + loja.nome;
+    modalCompra.showModal();
+    sim.focus();
+  };
+  if (modalCompra) {
+    $("#compraSim").addEventListener("click", () => modalCompra.close());
+    $("#compraNao").addEventListener("click", () => modalCompra.close());
+    // toque fora da caixa fecha
+    modalCompra.addEventListener("click", (e) => { if (e.target === modalCompra) modalCompra.close(); });
+  }
   const aplicarReservados = (lista) => {
     reservados.clear();
     lista.forEach((p) => { reservados.add(p); escolhidos.delete(p); });

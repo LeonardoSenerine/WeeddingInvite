@@ -678,3 +678,20 @@ figure { margin: 0; }
 .rsvp-done p { margin: 0; }
 .rsvp-done__whats { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
 .link-btn { background: none; border: 0; padding: 0; font: inherit; font-size: 0.95rem; color: var(--wine); text-decoration: underline; cursor: pointer; }
+
+/* Modal "quer comprar online?" */
+.modal {
+  width: min(440px, calc(100vw - 32px)); padding: 2.25rem 1.75rem 1.75rem;
+  border: 1px solid var(--line); background: var(--paper); color: var(--text);
+  text-align: center; box-shadow: 0 24px 60px rgba(59, 42, 30, 0.25);
+}
+.modal[open] { animation: modalIn 0.28s ease both; }
+.modal::backdrop { background: rgba(43, 25, 18, 0.55); backdrop-filter: blur(2px); }
+@keyframes modalIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+.modal__icon { display: block; font-size: 1.6rem; color: var(--wine); line-height: 1; margin-bottom: 0.6rem; }
+.modal .eyebrow { margin-bottom: 0.3rem; }
+.modal__title { margin: 0; font: 500 1.9rem/1.15 var(--serif); color: var(--wine); }
+.modal__item { margin: 0.9rem 0 0.4rem; font: italic 500 1.35rem/1.3 var(--serif); color: var(--ink); }
+.modal__text { margin: 0 0 1.5rem; font-size: 0.98rem; color: var(--muted); }
+.modal__actions { display: grid; gap: 0.6rem; }
+.modal__actions .btn { width: 100%; text-align: center; line-height: 1.35; }
