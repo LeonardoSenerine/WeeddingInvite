@@ -257,12 +257,37 @@
   }
 
   // ---------- Presentes escolhidos (compartilhado entre a lista e o formulário) ----------
+  const API = (C.planilhaUrl || "").trim();
   const escolhidos = new Set();
+  const reservados = new Set(); // já escolhidos por outros convidados (vem da planilha)
   const onEscolha = [];
+  const redesenhar = () => onEscolha.forEach((fn) => fn());
   const alternar = (item) => {
+    if (reservados.has(item)) return;
     escolhidos.has(item) ? escolhidos.delete(item) : escolhidos.add(item);
-    onEscolha.forEach((fn) => fn());
+    redesenhar();
   };
+  const aplicarReservados = (lista) => {
+    reservados.clear();
+    lista.forEach((p) => { reservados.add(p); escolhidos.delete(p); });
+    redesenhar();
+  };
+  // Identificador deste aparelho: se a pessoa reenviar, a resposta anterior é substituída
+  const idConvidado = () => {
+    let id = "";
+    try { id = localStorage.getItem("convite-id") || ""; } catch {}
+    if (!id) {
+      id = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+      try { localStorage.setItem("convite-id", id); } catch {}
+    }
+    return id;
+  };
+  if (API) {
+    fetch(API + "?acao=presentes")
+      .then((r) => r.json())
+      .then((r) => { if (r.ok) aplicarReservados(r.reservados); })
+      .catch(() => {});
+  }
 
   // ---------- Lista de presentes ----------
   const tabs = $("#giftTabs"), list = $("#giftList");
@@ -291,9 +316,12 @@
   const marcarLista = () => {
     $$(".gift__pick", list).forEach((b) => {
       const on = escolhidos.has(b.dataset.item);
-      b.textContent = on ? "Escolhido ✓" : "Vou dar";
+      const tomado = reservados.has(b.dataset.item);
+      b.textContent = tomado ? "Já escolhido" : on ? "Escolhido ✓" : "Vou dar";
+      b.disabled = tomado;
       b.setAttribute("aria-pressed", on);
       b.closest(".gift").classList.toggle("is-picked", on);
+      b.closest(".gift").classList.toggle("is-taken", tomado);
     });
   };
   onEscolha.push(marcarLista);
@@ -323,7 +351,13 @@
     marcarForm();
   };
   const marcarForm = () => {
-    $$(".chip", pickItems).forEach((b) => b.setAttribute("aria-pressed", escolhidos.has(b.dataset.item)));
+    $$(".chip", pickItems).forEach((b) => {
+      const tomado = reservados.has(b.dataset.item);
+      b.setAttribute("aria-pressed", escolhidos.has(b.dataset.item));
+      b.disabled = tomado;
+      b.classList.toggle("is-taken", tomado);
+      b.title = tomado ? "Outro convidado já escolheu este presente" : "";
+    });
     pickSummary.innerHTML = "";
     if (!escolhidos.size) return;
     const t = document.createElement("span");
@@ -546,7 +580,85 @@
     clamp();
   });
   form.nome.addEventListener("input", () => form.nome.parentElement.classList.remove("is-invalid"));
-  form.addEventListener("submit", (e) => {
+
+  // Dados do formulário num formato só (usado na planilha e na mensagem do WhatsApp)
+  const coletar = () => {
+    const vai = form.vai.value === "sim";
+    const acompanhantes = vai ? $$(".acomp__item", acompList).map((item) => ({
+      tipo: item.classList.contains("acomp__item--crianca") ? "crianca" : "adulto",
+      nome: $(".field:not(.field--idade):not(.field--select) input", item).value.trim(),
+      parentesco: $(".field--select", item).dataset.valor || "",
+      idade: $(".field--idade input", item)?.value.trim() || "",
+    })) : [];
+    return {
+      id: idConvidado(),
+      nome: form.nome.value.trim(),
+      vai,
+      acompanhantes,
+      presentes: [...escolhidos],
+      presenteOutro: form.presenteOutro.value.trim(),
+      recado: form.recado.value.trim(),
+      contato: C.contatos[+form.contato.value]?.nome || "",
+    };
+  };
+
+  const mensagemWhats = (d, contato) => {
+    const linhas = [`Olá, ${contato.nome}! 💍`, ""];
+    if (d.vai) {
+      linhas.push(`Quero *confirmar minha presença* no casamento de ${C.noiva} & ${C.noivo}!`, "");
+      linhas.push(`👤 Nome: ${d.nome}`);
+      const desc = (a) => {
+        const extra = [a.parentesco.toLowerCase(), a.idade ? `${a.idade} ${+a.idade === 1 ? "ano" : "anos"}` : ""].filter(Boolean).join(", ");
+        return `   • ${a.nome} (${extra})`;
+      };
+      const adultos = d.acompanhantes.filter((a) => a.tipo === "adulto");
+      const criancas = d.acompanhantes.filter((a) => a.tipo === "crianca");
+      linhas.push(`👥 Adultos: ${adultos.length + 1}`, `   • ${d.nome} (eu)`, ...adultos.map(desc));
+      if (criancas.length) linhas.push(`🧒 Crianças: ${criancas.length}`, ...criancas.map(desc));
+    } else {
+      linhas.push(`Aqui é ${d.nome}. Infelizmente *não poderei comparecer* ao casamento de ${C.noiva} & ${C.noivo}. 😢`);
+    }
+    const presentes = [...d.presentes, d.presenteOutro].filter(Boolean);
+    if (presentes.length) linhas.push("", `🎁 Presente: ${presentes.join(", ")}`);
+    if (d.recado) linhas.push("", `💌 Recado: ${d.recado}`);
+    return `https://wa.me/${contato.telefone}?text=${encodeURIComponent(linhas.join("\n"))}`;
+  };
+
+  const btnEnviar = $("#rsvpSubmit");
+  if (API) {
+    btnEnviar.textContent = "Confirmar presença";
+    $("#contatosFs").hidden = true;
+    $("#rsvpComo").innerHTML = "Preencha o formulário e toque em <strong>Confirmar presença</strong>. Sua resposta vai direto para a nossa lista de convidados.";
+  }
+  const mostrarSucesso = (d) => {
+    const box = $("#rsvpDone");
+    $("#rsvpDoneTitle").textContent = d.vai ? `Presença confirmada, ${d.nome.split(" ")[0]}!` : `Obrigado por avisar, ${d.nome.split(" ")[0]}.`;
+    const total = 1 + d.acompanhantes.length;
+    const partes = [];
+    if (d.vai) partes.push(total === 1 ? "Sua presença está na nossa lista." : `Anotamos ${total} pessoas na nossa lista.`);
+    else partes.push("Sentiremos sua falta, mas ficamos felizes com o carinho.");
+    const presentes = [...d.presentes, d.presenteOutro].filter(Boolean);
+    if (presentes.length) partes.push(`Presente reservado: ${presentes.join(", ")}.`);
+    $("#rsvpDoneText").textContent = partes.join(" ");
+    const zap = $("#rsvpDoneWhats");
+    zap.innerHTML = "";
+    C.contatos.forEach((c) => {
+      const a = document.createElement("a");
+      a.className = "btn btn--ghost"; a.target = "_blank"; a.rel = "noopener";
+      a.href = mensagemWhats(d, c);
+      a.textContent = "Avisar " + c.nome + " no WhatsApp";
+      zap.appendChild(a);
+    });
+    form.hidden = true;
+    box.hidden = false;
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+  $("#rsvpEditar").addEventListener("click", () => {
+    $("#rsvpDone").hidden = true;
+    form.hidden = false;
+  });
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const err = $("#formError");
     const nome = form.nome.value.trim();
@@ -562,38 +674,41 @@
       $("input, button", [...semNome, ...semPar][0]).focus(); return;
     }
     err.textContent = "";
-    const contato = C.contatos[+form.contato.value];
-    const vai = form.vai.value === "sim";
-    const linhas = [`Olá, ${contato.nome}! 💍`, ""];
-    if (vai) {
-      linhas.push(`Quero *confirmar minha presença* no casamento de ${C.noiva} & ${C.noivo}!`, "");
-      linhas.push(`👤 Nome: ${nome}`);
-      const nomesDe = (tipo) => $$(`.acomp__item--${tipo}`, acompList).map((item) => {
-        const nomeA = $(".field:not(.field--idade) input", item).value.trim();
-        const idade = $(".field--idade input", item)?.value.trim();
-        const par = ($(".field--select", item).dataset.valor || "").toLowerCase();
-        const extra = [par, idade ? `${idade} ${+idade === 1 ? "ano" : "anos"}` : ""].filter(Boolean).join(", ");
-        return `${nomeA} (${extra})`;
-      });
-      const adultosNomes = nomesDe("adulto"), criancasNomes = nomesDe("crianca");
-      linhas.push(`👥 Adultos: ${form.adultos.value || 1}`);
-      linhas.push(`   • ${nome} (eu)`);
-      adultosNomes.forEach((n) => linhas.push(`   • ${n}`));
-      if (criancasNomes.length) {
-        linhas.push(`🧒 Crianças: ${criancasNomes.length}`);
-        criancasNomes.forEach((n) => linhas.push(`   • ${n}`));
-      }
-    } else {
-      linhas.push(`Aqui é ${nome}. Infelizmente *não poderei comparecer* ao casamento de ${C.noiva} & ${C.noivo}. 😢`);
-    }
-    const presentes = [...escolhidos];
-    if (form.presenteOutro.value.trim()) presentes.push(form.presenteOutro.value.trim());
-    if (presentes.length) linhas.push("", `🎁 Presente: ${presentes.join(", ")}`);
-    if (form.recado.value.trim()) linhas.push("", `💌 Recado: ${form.recado.value.trim()}`);
-    const url = `https://wa.me/${contato.telefone}?text=${encodeURIComponent(linhas.join("\n"))}`;
-    window.open(url, "_blank", "noopener");
-  });
+    const d = coletar();
 
+    // Sem planilha configurada: só abre o WhatsApp, como antes
+    if (!API) {
+      window.open(mensagemWhats(d, C.contatos[+form.contato.value]), "_blank", "noopener");
+      return;
+    }
+
+    const rotulo = btnEnviar.textContent;
+    btnEnviar.disabled = true; btnEnviar.textContent = "Enviando…";
+    try {
+      const r = await fetch(API, {
+        method: "POST",
+        // text/plain evita a verificação CORS que o Apps Script não responde
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(d),
+      }).then((res) => res.json());
+      if (r.reservados) aplicarReservados(r.reservados);
+      if (r.ok) {
+        try { localStorage.setItem("convite-enviado", "1"); } catch {}
+        mostrarSucesso(d);
+      } else if (r.erro === "indisponivel") {
+        err.textContent = (r.itens.length === 1 ? `"${r.itens[0]}" acabou de ser escolhido` : `${r.itens.join(", ")} acabaram de ser escolhidos`) +
+          " por outro convidado. Escolha outro presente e envie de novo.";
+        $("#giftPick").scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        err.textContent = "Não conseguimos registrar sua resposta. Confira os dados e tente de novo.";
+      }
+    } catch {
+      err.textContent = "Sem conexão com a lista agora. Tente de novo em instantes ou confirme pelo WhatsApp com " +
+        C.contatos.map((c) => `${c.nome} (${c.exibicao})`).join(" ou ") + ".";
+    } finally {
+      btnEnviar.disabled = false; btnEnviar.textContent = rotulo;
+    }
+  });
   // ---------- Animações ----------
   const semMov = matchMedia("(prefers-reduced-motion: reduce)").matches;
 

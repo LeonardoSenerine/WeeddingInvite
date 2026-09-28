@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="color-scheme" content="only light" />
+  <title>Lista de convidados · Isabella &amp; Murilo</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: only light;
+      --bg: #f5efe4; --paper: #fbf8f2; --wine: #8a1a1c; --gold: #9c7a4c;
+      --ink: #3b2a1e; --muted: #6f5c4a; --line: #dccdb4;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.6 "Jost", system-ui, sans-serif; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 16px 4rem; }
+    h1 { font: 600 2.2rem/1.2 "Cormorant Garamond", serif; color: var(--wine); margin: 0 0 0.25rem; }
+    h2 { font: 600 1.6rem/1.2 "Cormorant Garamond", serif; color: var(--wine); margin: 2.5rem 0 0.75rem; }
+    .muted { color: var(--muted); }
+    .login { max-width: 380px; margin: 12vh auto; background: var(--paper); border: 1px solid var(--line); padding: 2rem; display: grid; gap: 1rem; text-align: center; }
+    input { font: inherit; padding: 0.75rem 1rem; border: 1px solid var(--line); background: #fff; width: 100%; }
+    .btn { font: 500 0.8rem "Jost", sans-serif; letter-spacing: 0.12em; text-transform: uppercase; background: var(--wine); color: #fff; border: 0; padding: 0.9rem 1.2rem; cursor: pointer; }
+    .btn--ghost { background: transparent; color: var(--wine); border: 1px solid var(--wine); }
+    .erro { color: #b2402f; margin: 0; }
+    .erro:empty { display: none; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+    .stat { background: var(--paper); border: 1px solid var(--line); padding: 1rem; }
+    .stat strong { display: block; font: 600 2.2rem/1 "Cormorant Garamond", serif; color: var(--wine); }
+    .stat span { font-size: 0.85rem; color: var(--muted); }
+    .acoes { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .tabela { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td { text-align: left; padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { background: #f3e3cc; font-weight: 500; white-space: nowrap; }
+    tr:last-child td { border-bottom: 0; }
+    .topo { display: flex; justify-content: space-between; align-items: end; gap: 1rem; flex-wrap: wrap; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <form class="login" id="login">
+    <h1>Lista de convidados</h1>
+    <p class="muted">Área dos noivos. Digite a senha configurada no Apps Script.</p>
+    <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" required />
+    <p class="erro" id="erro"></p>
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+
+  <main id="painel" hidden>
+    <div class="topo">
+      <div>
+        <h1>Lista de convidados</h1>
+        <p class="muted" id="atualizado"></p>
+      </div>
+      <div class="acoes">
+        <button class="btn" id="baixarBuffet">Baixar lista para o buffet</button>
+        <button class="btn btn--ghost" id="baixarTudo">Baixar respostas completas</button>
+        <button class="btn btn--ghost" id="recarregar">Atualizar</button>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <h2>Convidados confirmados</h2>
+    <div class="tabela"><table id="tConvidados"></table></div>
+
+    <h2>Respostas</h2>
+    <div class="tabela"><table id="tRespostas"></table></div>
+
+    <h2>Presentes reservados</h2>
+    <div class="tabela"><table id="tPresentes"></table></div>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    (function () {
+      const API = (window.CONVITE.planilhaUrl || "").trim();
+      const $ = (s) => document.querySelector(s);
+      let dados = null, senha = "";
+      try { senha = sessionStorage.getItem("convite-senha") || ""; } catch {}
+
+      if (!API) { $("#erro").textContent = "Configure planilhaUrl no config.js primeiro."; }
+
+      const dataBR = (iso) => iso ? new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : "";
+
+      const tabela = (el, colunas, linhas) => {
+        el.innerHTML = "";
+        const thead = el.createTHead().insertRow();
+        colunas.forEach(([rot]) => { const th = document.createElement("th"); th.textContent = rot; thead.appendChild(th); });
+        const tb = el.createTBody();
+        if (!linhas.length) { const c = tb.insertRow().insertCell(); c.colSpan = colunas.length; c.textContent = "Nada por aqui ainda."; c.className = "muted"; }
+        linhas.forEach((l) => { const tr = tb.insertRow(); colunas.forEach(([, f]) => { tr.insertCell().textContent = f(l) ?? ""; }); });
+      };
+
+      const colConvidados = [
+        ["#", (l) => l._n], ["Nome", (l) => l.Nome], ["Tipo", (l) => l.Tipo], ["Idade", (l) => l.Idade],
+        ["Parentesco", (l) => l.Parentesco], ["Convidado por", (l) => l["Convidado por"]],
+      ];
+      const colRespostas = [
+        ["Data", (l) => dataBR(l.Data)], ["Nome", (l) => l.Nome], ["Vai?", (l) => l["Vai?"]],
+        ["Adultos", (l) => l.Adultos], ["Crianças", (l) => l["Crianças"]], ["Acompanhantes", (l) => l.Acompanhantes],
+        ["Presentes", (l) => [l.Presentes, l["Outro presente"]].filter(Boolean).join("; ")], ["Recado", (l) => l.Recado],
+      ];
+
+      const render = () => {
+        const conv = dados.convidados.map((l, i) => ({ ...l, _n: i + 1 }));
+        const resp = dados.confirmacoes;
+        const adultos = conv.filter((l) => l.Tipo === "Adulto").length;
+        const criancas = conv.length - adultos;
+        const naoVao = resp.filter((l) => l["Vai?"] === "Não").length;
+        $("#stats").innerHTML = "";
+        [[conv.length, "pessoas confirmadas"], [adultos, "adultos"], [criancas, "crianças"],
+         [resp.length - naoVao, "convites confirmados"], [naoVao, "não poderão ir"], [dados.presentes.length, "presentes reservados"]]
+          .forEach(([n, t]) => { const d = document.createElement("div"); d.className = "stat"; d.innerHTML = "<strong></strong><span></span>"; d.firstChild.textContent = n; d.lastChild.textContent = t; $("#stats").appendChild(d); });
+        tabela($("#tConvidados"), colConvidados, conv);
+        tabela($("#tRespostas"), colRespostas, resp);
+        tabela($("#tPresentes"), [["Presente", (l) => l.Presente], ["Reservado por", (l) => l["Reservado por"]], ["Data", (l) => dataBR(l.Data)]], dados.presentes);
+        $("#atualizado").textContent = "Atualizado em " + new Date().toLocaleString("pt-BR");
+      };
+
+      const carregar = async () => {
+        const r = await fetch(API + "?acao=lista&senha=" + encodeURIComponent(senha)).then((x) => x.json());
+        if (!r.ok) throw new Error(r.erro);
+        dados = r;
+        $("#login").hidden = true; $("#painel").hidden = false;
+        render();
+      };
+
+      $("#login").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!API) return;
+        senha = $("#senha").value;
+        $("#erro").textContent = "";
+        try {
+          await carregar();
+          try { sessionStorage.setItem("convite-senha", senha); } catch {}
+        } catch (err) {
+          $("#erro").textContent = err.message === "senha" ? "Senha incorreta." : "Não foi possível carregar a lista.";
+        }
+      });
+      if (API && senha) carregar().catch(() => {});
+      $("#recarregar").addEventListener("click", () => carregar().catch(() => alert("Não foi possível atualizar.")));
+
+      // CSV no formato que o Excel abre direto (ponto e vírgula + BOM UTF-8)
+      const baixarCSV = (nome, colunas, linhas) => {
+        const esc = (v) => { const s = String(v ?? ""); return /[";\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+        const csv = [colunas.map(([c]) => c), ...linhas.map((l) => colunas.map(([, f]) => f(l)))].map((r) => r.map(esc).join(";")).join("\r\n");
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }));
+        a.download = nome;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      };
+      $("#baixarBuffet").addEventListener("click", () =>
+        baixarCSV("lista-buffet-isabella-murilo.csv", colConvidados, dados.convidados.map((l, i) => ({ ...l, _n: i + 1 }))));
+      $("#baixarTudo").addEventListener("click", () =>
+        baixarCSV("respostas-convite-isabella-murilo.csv", colRespostas, dados.confirmacoes));
+    })();
+  </script>
+</body>
+</html>

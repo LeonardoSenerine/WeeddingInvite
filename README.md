@@ -1,7 +1,14 @@
 # Convite de Casamento
 
 Site estático (HTML/CSS/JS, sem build) com contagem regressiva, programação do dia, informações,
-confirmação de presença via WhatsApp (com escolha de presente) e lista de presentes.
+confirmação de presença e lista de presentes.
+
+## Lista de confirmados e presentes reservados
+As confirmações podem ir para uma **Planilha Google** (grátis), e os presentes escolhidos
+ficam indisponíveis para os outros convidados. A página **`lista.html`** (com senha) mostra os
+totais e baixa a lista para o buffet em formato Excel.
+Passo a passo: **[apps-script/COMO-INSTALAR.md](apps-script/COMO-INSTALAR.md)**.
+Enquanto `planilhaUrl` estiver vazio no `config.js`, a confirmação continua só pelo WhatsApp.
 
 ## Como editar
 Todos os dados ficam em **`config.js`**: nomes, data/hora, local, traje, programação, informações,
