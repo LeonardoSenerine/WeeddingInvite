@@ -89,6 +89,7 @@
     festa: '<path d="M12 2v3"/><circle cx="12" cy="12" r="7"/><path d="M5 12h14M12 5c2 2.2 2 11.8 0 14M12 5c-2 2.2-2 11.8 0 14M6.5 8h11M6.5 16h11"/>',
   };
   const prog = $("#programa");
+  prog.style.setProperty("--n", (C.programa || []).length || 1);
   (C.programa || []).forEach((p) => {
     const li = document.createElement("li");
     li.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icones[p.icone] || icones.festa}</svg>

@@ -14,10 +14,10 @@ window.CONVITE = {
 
   local: {
     nome: "Chácara Recanto Moenda",
-    endereco: "", // TODO: endereço completo
-    cidade: "",   // TODO: cidade / UF
+    endereco: "Rua Antônio Carlos de Oliveira, 15 — Residencial Grêmio/Moenda, Bairro Moenda 1",
+    cidade: "Itatiba/SP",
     // Link do Google Maps (se vazio, é gerado a partir do nome + endereço)
-    mapa: "",
+    mapa: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Rua Antônio Carlos de Oliveira, 15, Moenda, Itatiba - SP"),
   },
 
   // Traje (vazio = não exibe o card)
@@ -25,20 +25,16 @@ window.CONVITE = {
   trajeObs: "",
 
   // Programação do dia — ícones: chegada, cerimonia, brinde, jantar, festa
-  // TODO: confirmar os horários (só o da cerimônia é oficial)
   programa: [
-    { hora: "16h00", nome: "Chegada", icone: "chegada", descricao: "Recepção dos convidados" },
     { hora: "16h30", nome: "Cerimônia", icone: "cerimonia", descricao: "O momento do nosso sim" },
-    { hora: "17h30", nome: "Brinde", icone: "brinde", descricao: "Coquetel e fotos" },
-    { hora: "19h00", nome: "Jantar", icone: "jantar", descricao: "Hora de comer bem" },
-    { hora: "21h00", nome: "Festa", icone: "festa", descricao: "Pista aberta até o fim" },
+    { hora: "Em seguida", nome: "Jantar", icone: "jantar", descricao: "Celebração com as pessoas que amamos" },
   ],
 
   // Informações importantes — {hora}, {local} e {contatos} são preenchidos automaticamente
   // TODO: revisar os textos
   informacoes: [
     { titulo: "Chegue com antecedência", texto: "A cerimônia começa às {hora}. Chegue uns 30 minutos antes para estacionar, se acomodar e não perder a entrada da noiva." },
-    { titulo: "Cerimônia e festa no mesmo lugar", texto: "Tudo acontece na {local}. Não precisa se deslocar entre a cerimônia e a recepção." },
+    { titulo: "Cerimônia e jantar no mesmo lugar", texto: "Cerimônia e jantar acontecem na {local}. Não precisa se deslocar entre um e outro." },
     { titulo: "Acompanhantes", texto: "Pedimos que os acompanhantes sejam apenas familiares. Ao confirmar, informe o nome e o parentesco de cada um." },
     { titulo: "Confirme sua presença", texto: "Use o formulário desta página. Leva menos de um minuto e ajuda muito na organização de lugares e buffet." },
     { titulo: "Fotos e momentos", texto: "Fique à vontade para registrar a festa e compartilhar com a gente. Vamos adorar ver o dia pelo seu olhar." },
