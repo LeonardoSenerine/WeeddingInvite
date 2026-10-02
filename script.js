@@ -94,8 +94,10 @@
     const li = document.createElement("li");
     li.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icones[p.icone] || icones.festa}</svg>
       <span class="timeline__time"></span><span class="timeline__name"></span><span class="timeline__desc"></span>`;
-    $(".timeline__time", li).textContent = p.hora;
-    $(".timeline__name", li).textContent = p.nome;
+    // sem horário, o nome ocupa o lugar de destaque da hora
+    $(".timeline__time", li).textContent = p.hora || p.nome;
+    $(".timeline__name", li).textContent = p.hora ? p.nome : "";
+    $(".timeline__name", li).hidden = !p.hora;
     $(".timeline__desc", li).textContent = p.descricao || "";
     prog.appendChild(li);
   });

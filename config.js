@@ -25,9 +25,10 @@ window.CONVITE = {
   trajeObs: "",
 
   // Programação do dia — ícones: chegada, cerimonia, brinde, jantar, festa
+  // hora é opcional: sem ela, o nome aparece em destaque no lugar
   programa: [
-    { hora: "16h30", nome: "Cerimônia", icone: "cerimonia", descricao: "O momento do nosso sim" },
-    { hora: "Em seguida", nome: "Jantar", icone: "jantar", descricao: "Celebração com as pessoas que amamos" },
+    { nome: "Cerimônia", icone: "cerimonia", descricao: "O momento do nosso sim" },
+    { nome: "Jantar", icone: "jantar", descricao: "Logo após a cerimônia, para celebrar com quem amamos" },
   ],
 
   // Informações importantes — {hora}, {local} e {contatos} são preenchidos automaticamente
